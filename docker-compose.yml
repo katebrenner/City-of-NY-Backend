@@ -34,8 +34,16 @@ services:
         - ./accidents-api:/accidents-api
       depends_on:
         - eureka
-#        - postgresdev
+        - postgresdev
       command: './gradlew bootRun'
       environment:
         - GRADLE_USER_HOME=cache
         - SPRING_PROFILES_ACTIVE=dev
+  postgresdev:
+      image: postgres
+      ports:
+        - "5432:5432"
+      environment:
+        - POSTGRES_PASSWORD=password
+        - POSTGRES_USER=postgres
+        - POSTGRES_DB=pgdev

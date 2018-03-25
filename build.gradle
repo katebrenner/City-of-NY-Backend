@@ -35,12 +35,23 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+	testCompile 'io.rest-assured:rest-assured:3.0.6'
+	compileOnly 'org.projectlombok:lombok'
+	runtime 'org.postgresql:postgresql'
+	runtime 'org.springframework.boot:spring-boot-devtools'
 }
 task waitForAccidentsAPI(type: Exec) {
 	commandLine './wait-for-api.sh','http://localhost:8080/accidents', 'Accidents API'
 }
 
 test {
+	dependsOn cleanTest
 	dependsOn waitForAccidentsAPI
+
+	testLogging {
+		exceptionFormat "full"
+		events "skipped", "passed", "failed"
+		displayGranularity 2
+	}
 }
 
