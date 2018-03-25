@@ -38,6 +38,37 @@ public class AccidentsController {
         return foundAccident;
     }
 
+    @DeleteMapping("/{accidentId}")
+    public HttpStatus deleteAccidentById(@PathVariable Long accidentId) throws EmptyResultDataAccessException {
+        accidentRepository.delete(accidentId);
+        return HttpStatus.OK;
+    }
+
+    @PostMapping("/")
+    public Accident createNewAccident(@RequestBody Accident newAccident) {
+        return accidentRepository.save(newAccident);
+    }
+
+    @PatchMapping("/{accidentId}")
+    public Accident updateAccidentById(@PathVariable Long accidentId, @RequestBody Accident accidentRequest) throws NotFoundException {
+        Accident accidentFromDb = accidentRepository.findOne(accidentId);
+        if (accidentFromDb == null) {
+            throw new NotFoundException("Accident with ID of " + accidentId + " was not found!");
+        }
+        accidentFromDb.setDate(accidentRequest.getDate());
+        accidentFromDb.setTime(accidentRequest.getTime());
+        accidentFromDb.setBorough(accidentRequest.getBorough());
+        accidentFromDb.setZipCode(accidentRequest.getZipCode());
+        accidentFromDb.setLatitude(accidentRequest.getLatitude());
+        accidentFromDb.setLongitude(accidentRequest.getLongitude());
+
+
+
+        return accidentRepository.save(accidentFromDb);
+    }
+
+
+
     @ExceptionHandler
     void handleAccidentNotFound(
             NotFoundException exception,
@@ -46,9 +77,12 @@ public class AccidentsController {
         response.sendError(HttpStatus.NOT_FOUND.value(), exception.getMessage());
     }
 
-    @DeleteMapping("/{accidentId}")
-    public HttpStatus deleteAccidentById(@PathVariable Long accidentId) {
-        return HttpStatus.OK;
+    @ExceptionHandler
+    void handleDeleteNotFoundException(
+            EmptyResultDataAccessException exception,
+            HttpServletResponse response) throws IOException {
+
+        response.sendError(HttpStatus.NOT_FOUND.value());
     }
 
 }

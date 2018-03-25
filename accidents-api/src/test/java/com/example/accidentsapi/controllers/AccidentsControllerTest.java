@@ -38,6 +38,13 @@ public class AccidentsControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    private Accident newAccident;
+
+    private Accident updatedSecondAccident;
+
+    @Autowired
+    private ObjectMapper jsonObjectMapper;
+
     @MockBean
     private AccidentRepository mockAccidentRepository;
 
@@ -61,13 +68,35 @@ public class AccidentsControllerTest {
                 -123.9
         );
 
+        newAccident = new Accident(
+                "newDate",
+                "newTime",
+                "newBorough",
+                "newZip",
+                1111.0,
+                1111.0
+        );
+        given(mockAccidentRepository.save(newAccident)).willReturn(newAccident);
+
+        updatedSecondAccident = new Accident(
+                "updated_date",
+                "updated_time",
+                "updated_borough",
+                "updated_zip",
+                2222.0,
+                2222.0
+        );
+        given(mockAccidentRepository.save(updatedSecondAccident)).willReturn(updatedSecondAccident);
+
 
         Iterable<Accident> mockAccidents =
                 Stream.of(firstAccident, secondAccident).collect(Collectors.toList());
-
         given(mockAccidentRepository.findAll()).willReturn(mockAccidents);
         given(mockAccidentRepository.findOne(1L)).willReturn(firstAccident);
         given(mockAccidentRepository.findOne(4L)).willReturn(null);
+        doAnswer(invocation -> {
+            throw new EmptyResultDataAccessException("ERROR MESSAGE FROM MOCK!!!", 1234);
+        }).when(mockAccidentRepository).delete(4L);
     }
 
     @Test
@@ -155,6 +184,142 @@ public class AccidentsControllerTest {
         this.mockMvc
                 .perform(delete("/1"))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void deleteAccidentById_success_deletesViaRepository() throws Exception {
+
+        this.mockMvc.perform(delete("/1"));
+
+        verify(mockAccidentRepository, times(1)).delete(1L);
+    }
+
+    @Test
+    public void deleteAccidentById_failure_userNotFoundReturns404() throws Exception {
+
+        this.mockMvc
+                .perform(delete("/4"))
+                .andExpect(status().isNotFound());
+    }
+
+
+    @Test
+    public void createAccident_success_returnsStatusOk() throws Exception {
+
+        this.mockMvc
+                .perform(
+                        post("/")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(jsonObjectMapper.writeValueAsString(newAccident))
+                )
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void createAccident_success_returnsUserName() throws Exception {
+
+        this.mockMvc
+                .perform(
+                        post("/")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(jsonObjectMapper.writeValueAsString(newAccident))
+                )
+                .andExpect(jsonPath("$.borough", is("newBorough")));
+    }
+
+    @Test
+    public void createAccident_success_returnsFirstName() throws Exception {
+
+        this.mockMvc
+                .perform(
+                        post("/")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(jsonObjectMapper.writeValueAsString(newAccident))
+                )
+                .andExpect(jsonPath("$.date", is("newDate")));
+    }
+
+    @Test
+    public void createAccident_success_returnsLatitude() throws Exception {
+
+        this.mockMvc
+                .perform(
+                        post("/")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(jsonObjectMapper.writeValueAsString(newAccident))
+                )
+                .andExpect(jsonPath("$.latitude", is(1111.0)));
+    }
+    @Test
+    public void updateAccidentById_success_returnsStatusOk() throws Exception {
+
+        this.mockMvc
+                .perform(
+                        patch("/1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(jsonObjectMapper.writeValueAsString(updatedSecondAccident))
+                )
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void updateAccidentById_success_returnsUpdatedDate() throws Exception {
+
+        this.mockMvc
+                .perform(
+                        patch("/1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(jsonObjectMapper.writeValueAsString(updatedSecondAccident))
+                )
+                .andExpect(jsonPath("$.date", is("updated_date")));
+    }
+
+    @Test
+    public void updateAccidentById_success_returnsUpdatedBorough() throws Exception {
+
+        this.mockMvc
+                .perform(
+                        patch("/1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(jsonObjectMapper.writeValueAsString(updatedSecondAccident))
+                )
+                .andExpect(jsonPath("$.borough", is("updated_borough")));
+    }
+
+    @Test
+    public void updateAccidentById_success_returnsUpdatedlongitude() throws Exception {
+
+        this.mockMvc
+                .perform(
+                        patch("/1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(jsonObjectMapper.writeValueAsString(updatedSecondAccident))
+                )
+                .andExpect(jsonPath("$.longitude", is(2222.0)));
+    }
+
+    @Test
+    public void updateAccidentById_failure_userNotFoundReturns404() throws Exception {
+
+        this.mockMvc
+                .perform(
+                        patch("/4")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(jsonObjectMapper.writeValueAsString(updatedSecondAccident))
+                )
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void updateAccidentById_failure_userNotFoundReturnsNotFoundErrorMessage() throws Exception {
+
+        this.mockMvc
+                .perform(
+                        patch("/4")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(jsonObjectMapper.writeValueAsString(updatedSecondAccident))
+                )
+                .andExpect(status().reason(containsString("Accident with ID of 4 was not found!")));
     }
 
 }
