@@ -61,6 +61,7 @@ public class AccidentsController {
         accidentFromDb.setZipCode(accidentRequest.getZipCode());
         accidentFromDb.setLatitude(accidentRequest.getLatitude());
         accidentFromDb.setLongitude(accidentRequest.getLongitude());
+        accidentFromDb.setNotes(accidentRequest.getNotes());
 
 
 

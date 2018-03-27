@@ -37,7 +37,7 @@ public class AccidentsApiFeatureTest {
     }
 
     @Test
-    public void shouldAllowFullCrudForAUser() throws Exception {
+    public void shouldAllowFullCrudForAnAccident() throws Exception {
 
         Accident firstAccident = new Accident(
                 "date1",

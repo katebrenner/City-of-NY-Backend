@@ -56,7 +56,8 @@ public class AccidentsControllerTest {
                 "borough1",
                 "zip1",
                 12345.0,
-                -12345.0
+                -12345.0,
+                "notes1"
         );
 
         Accident secondAccident = new Accident(
@@ -65,7 +66,8 @@ public class AccidentsControllerTest {
                 "borough2",
                 "zip2",
                 123.9,
-                -123.9
+                -123.9,
+                "notes2"
         );
 
         newAccident = new Accident(
@@ -74,7 +76,8 @@ public class AccidentsControllerTest {
                 "newBorough",
                 "newZip",
                 1111.0,
-                1111.0
+                1111.0,
+                "notes3"
         );
         given(mockAccidentRepository.save(newAccident)).willReturn(newAccident);
 
@@ -84,7 +87,8 @@ public class AccidentsControllerTest {
                 "updated_borough",
                 "updated_zip",
                 2222.0,
-                2222.0
+                2222.0,
+                "notes4"
         );
         given(mockAccidentRepository.save(updatedSecondAccident)).willReturn(updatedSecondAccident);
 

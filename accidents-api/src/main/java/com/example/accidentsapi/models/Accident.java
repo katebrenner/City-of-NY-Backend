@@ -31,14 +31,18 @@ public class Accident {
     @Column(name="LONGITUDE")
     private Double longitude;
 
+    @Column(name="NOTES")
+    private String notes;
 
-    public Accident(String date, String time, String borough, String zipCode, Double latitude, Double longitude) {
+
+    public Accident(String date, String time, String borough, String zipCode, Double latitude, Double longitude, String notes) {
         this.date = date;
         this.time = time;
         this.borough = borough;
         this.zipCode = zipCode;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.notes = notes;
     }
 
 
