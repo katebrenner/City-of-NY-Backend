@@ -62,7 +62,8 @@ public class AccidentsController {
         accidentFromDb.setLatitude(accidentRequest.getLatitude());
         accidentFromDb.setLongitude(accidentRequest.getLongitude());
         accidentFromDb.setNotes(accidentRequest.getNotes());
-
+        accidentFromDb.setNumber_of_persons_injured(accidentRequest.getNumber_of_persons_injured());
+        accidentFromDb.setNumber_of_persons_killed(accidentRequest.getNumber_of_persons_killed());
 
 
         return accidentRepository.save(accidentFromDb);

@@ -57,7 +57,7 @@ public class AccidentsControllerTest {
                 "zip1",
                 12345.0,
                 -12345.0,
-                "notes1"
+                "notes1", 0,0
         );
 
         Accident secondAccident = new Accident(
@@ -67,7 +67,7 @@ public class AccidentsControllerTest {
                 "zip2",
                 123.9,
                 -123.9,
-                "notes2"
+                "notes2", 0,0
         );
 
         newAccident = new Accident(
@@ -77,7 +77,7 @@ public class AccidentsControllerTest {
                 "newZip",
                 1111.0,
                 1111.0,
-                "notes3"
+                "notes3", 0, 0
         );
         given(mockAccidentRepository.save(newAccident)).willReturn(newAccident);
 
@@ -88,7 +88,7 @@ public class AccidentsControllerTest {
                 "updated_zip",
                 2222.0,
                 2222.0,
-                "notes4"
+                "notes4", 0, 0
         );
         given(mockAccidentRepository.save(updatedSecondAccident)).willReturn(updatedSecondAccident);
 
@@ -120,14 +120,6 @@ public class AccidentsControllerTest {
     }
 
     @Test
-    public void findAllAccidents_success_returnBoroughForEachAccident() throws Exception {
-
-        this.mockMvc
-                .perform(get("/"))
-                .andExpect(jsonPath("$[0].borough", is("borough1")));
-    }
-
-    @Test
     public void findAllAccidents_success_returnDateForEachAcccident() throws Exception {
 
         this.mockMvc
@@ -136,12 +128,61 @@ public class AccidentsControllerTest {
     }
 
     @Test
+    public void findAllAccidents_success_returnTimeForEachAcccident() throws Exception {
+
+        this.mockMvc
+                .perform(get("/"))
+                .andExpect(jsonPath("$[0].time", is("time1")));
+    }
+
+    @Test
+    public void findAllAccidents_success_returnBoroughForEachAccident() throws Exception {
+
+        this.mockMvc
+                .perform(get("/"))
+                .andExpect(jsonPath("$[0].borough", is("borough1")));
+    }
+    @Test
+    public void findAllAccidents_success_returnZipForEachAcccident() throws Exception {
+
+        this.mockMvc
+                .perform(get("/"))
+                .andExpect(jsonPath("$[0].zip_code", is("zip1")));
+    }
+
+
+    @Test
     public void findAllAccidents_success_returnLatitudeForEachAcccident() throws Exception {
 
         this.mockMvc
                 .perform(get("/"))
                 .andExpect(jsonPath("$[0].latitude", is(12345.0)));
     }
+
+    @Test
+    public void findAllAccidents_success_returnLongitudeForEachAcccident() throws Exception {
+
+        this.mockMvc
+                .perform(get("/"))
+                .andExpect(jsonPath("$[0].longitude", is(-12345.0)));
+    }
+
+    @Test
+    public void findAllAccidents_success_returnInjuredForEachAcccident() throws Exception {
+
+        this.mockMvc
+                .perform(get("/"))
+                .andExpect(jsonPath("$[0].number_of_persons_injured", is(0)));
+    }
+
+    @Test
+    public void findAllAccidents_success_returnKilledForEachAcccident() throws Exception {
+
+        this.mockMvc
+                .perform(get("/"))
+                .andExpect(jsonPath("$[0].number_of_persons_killed", is(0)));
+    }
+
 
     @Test
     public void findAccidentById_success_returnsStatusOK() throws Exception {
