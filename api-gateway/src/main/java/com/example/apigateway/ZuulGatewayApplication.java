@@ -22,7 +22,6 @@ public class ZuulGatewayApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ZuulGatewayApplication.class, args);
 	}
-
 	@Bean
 	public CorsFilter corsFilter() {
 
@@ -34,4 +33,5 @@ public class ZuulGatewayApplication {
 		config.setAllowedMethods(Arrays.stream(Http.HttpMethod.values()).map(Http.HttpMethod::name).collect(Collectors.toList()));
 		source.registerCorsConfiguration("/**", config);
 		return new CorsFilter(source);
+	}
 }
