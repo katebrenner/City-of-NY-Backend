@@ -6,17 +6,17 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.stream.Stream;
+
+import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.when;
 import static io.restassured.http.ContentType.JSON;
-import static io.restassured.RestAssured.*;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.core.Is.is;
-
-import java.util.stream.Stream;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -45,7 +45,11 @@ public class AccidentsApiFeatureTest {
                 "borough1",
                 "zip1",
                 12345.0,
-                -12345.0
+                -12345.0,
+                "notes1",
+                0,
+                0
+
         );
 
         Accident secondAccident = new Accident(
@@ -54,7 +58,10 @@ public class AccidentsApiFeatureTest {
                 "borough2",
                 "zip2",
                 123.9,
-                -123.9
+                -123.9,
+                "notes1",
+                0,
+                0
         );
 
 
@@ -73,7 +80,8 @@ public class AccidentsApiFeatureTest {
         Accident accidentNotYetInDb = new Accident(
                 "Accident",
                 "Not",
-                "Yet", "Created", 000.00, 000.00
+                "Yet", "Created", 000.00, 000.00,
+                "noNotesYet", 0, 0
         );
 
         given()

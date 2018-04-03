@@ -3,7 +3,6 @@ package com.example.cityofnewyorkbackend.models;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Data
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter
@@ -32,16 +31,26 @@ public class Accident {
     @Column(name="LONGITUDE")
     private Double longitude;
 
+    @Column(name="NOTES")
+    private String notes;
 
-    public Accident(String date, String time, String borough, String zipCode, Double latitude, Double longitude) {
+    @Column(name="number_of_persons_injured")
+    private Integer number_of_persons_injured;
+
+    @Column(name="number_of_persons_killed")
+    private Integer number_of_persons_killed;
+
+    public Accident(String date, String time, String borough, String zipCode, Double latitude, Double longitude, String notes, Integer number_of_persons_injured, Integer number_of_persons_killed) {
         this.date = date;
         this.time = time;
         this.borough = borough;
         this.zipCode = zipCode;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.notes = notes;
+        this.number_of_persons_injured = number_of_persons_injured;
+        this.number_of_persons_killed = number_of_persons_killed;
     }
-
 
 
 }
