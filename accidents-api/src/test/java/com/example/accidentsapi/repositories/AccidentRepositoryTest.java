@@ -34,7 +34,9 @@ public class AccidentRepositoryTest {
                 "zip1",
                 12345.0,
                 -12345.0,
-                "test1"
+                "test1",
+                0,
+                0
         );
 
         Accident secondAccident = new Accident(
@@ -44,7 +46,9 @@ public class AccidentRepositoryTest {
                 "zip2",
                 123.9,
                 -123.9,
-                "test2"
+                "test2",
+                0,
+                0
         );
 
         entityManager.persist(firstAccident);

@@ -147,7 +147,7 @@ public class AccidentsControllerTest {
 
         this.mockMvc
                 .perform(get("/"))
-                .andExpect(jsonPath("$[0].zip_code", is("zip1")));
+                .andExpect(jsonPath("$[0].zipCode", is("zip1")));
     }
 
 

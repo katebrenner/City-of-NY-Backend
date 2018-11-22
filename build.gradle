@@ -39,6 +39,13 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	runtime 'org.postgresql:postgresql'
 	runtime 'org.springframework.boot:spring-boot-devtools'
+	testCompile 'org.seleniumhq.selenium:selenium-java:3.11.0'
+	testCompile 'org.seleniumhq.selenium:selenium-api:3.11.0'
+	testCompile 'org.seleniumhq.selenium:selenium-remote-driver:3.11.0'
+	testCompile 'org.seleniumhq.selenium:selenium-chrome-driver:3.11.0'
+	testCompile 'org.seleniumhq.selenium:selenium-support:3.11.0'
+	testCompile 'com.codeborne:selenide:4.10.01'
+
 }
 task waitForAccidentsAPI(type: Exec) {
 	commandLine './wait-for-api.sh','http://localhost:8080/accidents', 'Accidents API'
